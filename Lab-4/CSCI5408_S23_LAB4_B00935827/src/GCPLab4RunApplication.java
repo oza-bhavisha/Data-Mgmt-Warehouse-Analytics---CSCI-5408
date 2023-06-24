@@ -40,16 +40,6 @@ public class GCPLab4RunApplication {
 
             Statement statement = connection.createStatement();
 
-            // Query-2: CREATE TABLE query to create the order table
-            String createTableQuery = "CREATE TABLE orders ("
-                    + "order_id INT AUTO_INCREMENT PRIMARY KEY,"
-                    + "user_id INT,"
-                    + "item_name VARCHAR(255),"
-                    + "quantity INT,"
-                    + "order_date DATE)";
-            statement.executeUpdate(createTableQuery);
-
-            System.out.println("Order table created successfully!");
 
             // Update the available quantity in the remote database
             updateRemoteInventory(connection);
