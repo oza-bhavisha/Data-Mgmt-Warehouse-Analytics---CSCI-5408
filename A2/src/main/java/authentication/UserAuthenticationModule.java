@@ -1,30 +1,29 @@
 package authentication;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Scanner;
+import Utils.Utils;
+
+import java.util.*;
 
 /**
  * Module for user authentication.
  */
 public class UserAuthenticationModule {
-    private final Map<String, String> users;
+    private final Map<String, User> usersMap;
     private final UserFileHandler fileHandler;
     private final Scanner scanner;
 
     // Constructor for a UserAuthenticationModule.
     public UserAuthenticationModule() {
-        users = new HashMap<>();
         fileHandler = new UserFileHandler("user_details.txt");
         scanner = new Scanner(System.in);
+        usersMap = new HashMap<>();
     }
 
     // Starts the user authentication module.
     public void start() {
 
         // Load users from the file
-        fileHandler.loadUsers(users);
+        fileHandler.loadUsers(usersMap);
 
         while (true) {
             displayMenu();
@@ -40,7 +39,6 @@ public class UserAuthenticationModule {
                     login();
                     break;
                 case 3:
-                    fileHandler.saveUsers(users);
                     System.exit(0);
                     break;
                 default:
@@ -63,14 +61,14 @@ public class UserAuthenticationModule {
     private void createUser() {
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
-        if (users.containsKey(username)) {
+        if (usersMap.containsKey(username)) {
             System.out.println("This username already exists...");
             return;
         }
 
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
-        String hashedPassword = PasswordHashing.hashString(password);
+        String hashedPassword = Utils.hashString(password);
 
         System.out.print("Enter security question: ");
         String question = scanner.nextLine();
@@ -78,8 +76,8 @@ public class UserAuthenticationModule {
         System.out.print("Enter answer: ");
         String answer = scanner.nextLine();
 
-        String userData = hashedPassword + "::" + question + "::" + answer;
-        users.put(username, userData);
+        usersMap.put(username, new User(username, hashedPassword, question, answer));
+        fileHandler.saveUsers(usersMap);
         System.out.println("Yay.. User created successfully...");
     }
 
@@ -87,28 +85,27 @@ public class UserAuthenticationModule {
     private void login() {
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
-        if (!users.containsKey(username)) {
+        if (!usersMap.containsKey(username)) {
             System.out.println("Username not found!");
             return;
         }
 
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
-        String hashedPassword = PasswordHashing.hashString(password);
+        String hashedPassword = Utils.hashString(password);
 
-        String storedUserData = users.get(username);
-        String[] userDataParts = storedUserData.split("::");
-        String storedPassword = userDataParts[0];
+        User storedUserData = usersMap.get(username);
+        String storedPassword = storedUserData.getPassword();
 
         if (Objects.equals(hashedPassword, storedPassword)) {
             System.out.print("Enter security question: ");
             String question = scanner.nextLine();
 
-            if (question.equals(userDataParts[1])) {
+            if (question.equals(storedUserData.getQuestion())) {
                 System.out.print("Enter answer: ");
                 String answer = scanner.nextLine();
 
-                if (answer.equals(userDataParts[2])) {
+                if (answer.equals(storedUserData.getAnswer())) {
                     System.out.println("Login successful...");
                 } else {
                     System.out.println("Wrong answer...");

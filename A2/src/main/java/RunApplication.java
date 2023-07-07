@@ -1,4 +1,4 @@
-package authentication;
+import authentication.UserAuthenticationModule;
 
 // Main method to run
 public class RunApplication {

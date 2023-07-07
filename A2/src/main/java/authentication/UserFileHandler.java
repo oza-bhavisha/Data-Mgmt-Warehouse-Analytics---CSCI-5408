@@ -21,14 +21,14 @@ public class UserFileHandler {
     /**
      * Loads user data from the user file into the provided map.
      *
-     * @param users the map to store the loaded user data
+     * @param userMap the map to store the loaded user data
      */
-    public void loadUsers(Map<String, String> users) {
+    public void loadUsers(Map<String, User> userMap) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line= reader.readLine()) != null) {
                 String[] parts = line.split("::");
-                users.put(parts[0], parts[1]);
+                userMap.put(parts[0], new User(parts[0], parts[1], parts[2], parts[3]));
             }
         } catch (IOException e) {
             System.out.println("Error loading users: " + e.getMessage());
@@ -38,12 +38,14 @@ public class UserFileHandler {
     /**
      * Saves user data from the provided map into the user file.
      *
-     * @param users the map containing the user data to be saved
+     * @param userMap the map containing the user data to be saved
      */
-    public void saveUsers(Map<String, String> users) {
+    public void saveUsers(Map<String, User> userMap) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (Map.Entry<String, String> entry : users.entrySet()) {
-                String line = entry.getKey() + "::" + entry.getValue();
+            for (Map.Entry<String, User> entry : userMap.entrySet()) {
+                User user = entry.getValue();
+                String remainingLine = user.getPassword() + "::" + user.getQuestion() + "::" + user.getAnswer();
+                String line = entry.getKey() + "::" + remainingLine;
                 writer.write(line);
                 writer.newLine();
             }
