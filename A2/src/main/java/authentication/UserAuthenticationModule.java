@@ -1,6 +1,6 @@
 package authentication;
 
-import Utils.Utils;
+import utils.Utils;
 
 import java.util.*;
 
@@ -11,16 +11,21 @@ public class UserAuthenticationModule {
     private final Map<String, User> usersMap;
     private final UserFileHandler fileHandler;
     private final Scanner scanner;
+    private boolean isAuthenticated = false;
 
     // Constructor for a UserAuthenticationModule.
     public UserAuthenticationModule() {
-        fileHandler = new UserFileHandler("user_details.txt");
+        fileHandler = new UserFileHandler("logs/user_details.txt");
         scanner = new Scanner(System.in);
         usersMap = new HashMap<>();
     }
 
-    // Starts the user authentication module.
-    public void start() {
+    /**
+     * Starts the user authentication module.
+     *
+     * @return true if authentication is successful, false otherwise
+     */
+    public boolean start() {
 
         // Load users from the file
         fileHandler.loadUsers(usersMap);
@@ -36,7 +41,11 @@ public class UserAuthenticationModule {
                     createUser();
                     break;
                 case 2:
-                    login();
+                    boolean result = login();
+                    if (result) {
+                        isAuthenticated = true;
+                        return true;
+                    }
                     break;
                 case 3:
                     System.exit(0);
@@ -81,13 +90,17 @@ public class UserAuthenticationModule {
         System.out.println("Yay.. User created successfully...");
     }
 
-    // User login.
-    private void login() {
+    /**
+     * User login.
+     *
+     * @return true if login is successful, false otherwise
+     */
+    private boolean login() {
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
         if (!usersMap.containsKey(username)) {
             System.out.println("Username not found!");
-            return;
+            return false;
         }
 
         System.out.print("Enter password: ");
@@ -107,6 +120,7 @@ public class UserAuthenticationModule {
 
                 if (answer.equals(storedUserData.getAnswer())) {
                     System.out.println("Login successful...");
+                    return true;
                 } else {
                     System.out.println("Wrong answer...");
                 }
@@ -116,5 +130,15 @@ public class UserAuthenticationModule {
         } else {
             System.out.println("Wrong password...");
         }
+        return false;
+    }
+
+    /**
+     * Checks if the user is authenticated.
+     *
+     * @return true if user is authenticated, false otherwise
+     */
+    public boolean isAuthenticated() {
+        return isAuthenticated;
     }
 }

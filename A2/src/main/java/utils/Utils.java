@@ -1,10 +1,20 @@
-package Utils;
+package utils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Utility class for common operations.
+ */
 public class Utils {
+
+    /**
+     * Hashes a string using the MD5 algorithm.
+     *
+     * @param input the input string to be hashed
+     * @return the hashed string
+     */
     public static String hashString(String input) {
         try {
             // Reference: https://www.geeksforgeeks.org/md5-hash-in-java/

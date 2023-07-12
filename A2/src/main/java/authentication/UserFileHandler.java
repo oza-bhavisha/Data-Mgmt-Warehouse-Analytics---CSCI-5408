@@ -26,7 +26,7 @@ public class UserFileHandler {
     public void loadUsers(Map<String, User> userMap) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
-            while ((line= reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("::");
                 userMap.put(parts[0], new User(parts[0], parts[1], parts[2], parts[3]));
             }
