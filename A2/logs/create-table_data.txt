@@ -1,0 +1,8 @@
+students
+banner_id, name, course
+employee
+id, name, salary
+hotel
+name, location, ratings
+customer
+id, name, age, address

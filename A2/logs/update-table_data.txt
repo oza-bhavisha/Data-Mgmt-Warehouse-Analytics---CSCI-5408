@@ -1,0 +1,3 @@
+banner_id, name, course
+935827, Kairavi, MACS
+923647, bhaumik bhatt, BACS

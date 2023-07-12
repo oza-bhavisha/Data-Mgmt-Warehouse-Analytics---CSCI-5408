@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
  * The RunApplication class is responsible for running the application and handling user queries.
  */
 public class RunApplication {
+    private static String dataFilePath;
     public static void main(String[] args) {
         // Create an instance of the UserAuthenticationModule
         UserAuthenticationModule module = new UserAuthenticationModule();
@@ -70,5 +71,8 @@ public class RunApplication {
         } else {
             System.out.println("Authentication failed. Exiting the application.");
         }
+
+        TransactionHandler transactionHandler = new TransactionHandler(dataFilePath);
+        transactionHandler.handleTransaction();
     }
 }
