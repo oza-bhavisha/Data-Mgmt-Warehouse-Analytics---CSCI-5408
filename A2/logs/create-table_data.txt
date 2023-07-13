@@ -6,3 +6,5 @@ hotel
 name, location, ratings
 customer
 id, name, age, address
+xyz
+<column1>, <column2>, ...
