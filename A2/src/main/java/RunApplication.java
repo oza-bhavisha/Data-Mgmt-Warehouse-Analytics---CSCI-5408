@@ -12,8 +12,8 @@ public class RunApplication {
     private static String dataFilePath;
     public static void main(String[] args) {
 
-        String dataFilePath = "logs/data.txt"; // Path to your data file
-        String structureFilePath = "logs/structure.txt"; // Path to your structure file
+        String dataFilePath = "logs/data.txt";
+        String structureFilePath = "logs/structure.txt";
 
         // Create an instance of the UserAuthenticationModule
         UserAuthenticationModule module = new UserAuthenticationModule();
@@ -77,9 +77,11 @@ public class RunApplication {
             System.out.println("Authentication failed. Exiting the application.");
         }
 
+        // Call Transaction logic
         TransactionHandler transactionHandler = new TransactionHandler(dataFilePath);
         transactionHandler.handleTransaction();
 
+        // Call ERD Generator logic
         ERDGenerator erdGenerator = new ERDGenerator(dataFilePath, structureFilePath);
         erdGenerator.generateERD();
     }
