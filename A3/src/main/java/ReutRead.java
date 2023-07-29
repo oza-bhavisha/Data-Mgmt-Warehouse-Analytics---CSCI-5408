@@ -1,87 +1,70 @@
+import com.mongodb.client.*;
+import org.bson.Document;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
-
 public class ReutRead {
-    public static void main(String[] args) {
-        // MongoDB connection details
-        String connectionString = "mongodb://localhost:27017";
-        String dbName = "ReuterDb";
-        String collectionName = "newsArticles";
 
-        // Read the content of the two given news files
-        String file1Path = "reut2-009.sgm";
-        String file2Path = "reut2-014.sgm";
-        String file1Content = readNewsFile(file1Path);
-        String file2Content = readNewsFile(file2Path);
+    public void processData() {
+        String fileName1 = "/Users/bhavishaoza/IdeaProjects/DataMgmt/A3/src/reut2-009.sgm";
+        String fileName2 = "/Users/bhavishaoza/IdeaProjects/DataMgmt/A3/src/reut2-014.sgm";
 
-        // Extract news articles from the content
-        List<NewsArticle> newsArticles = extractNewsArticles(file1Content, file2Content);
+        // Step 1: Create MongoDB connection and database
+        String uri = "mongodb+srv://erbhavisha:admin@cluster-lab-6.pqo1uvf.mongodb.net/";
+        try (MongoClient mongoClient = MongoClients.create(uri)) {
+            MongoDatabase database = mongoClient.getDatabase("A3DB");
+            MongoCollection<Document> collection = database.getCollection("News");
 
-        // Create MongoDB client and connect to the database
-        MongoClientURI uri = new MongoClientURI(connectionString);
-        try (MongoClient mongoClient = new MongoClient(uri)) {
-            MongoDatabase database = mongoClient.getDatabase(dbName);
-            MongoCollection<Document> collection = database.getCollection(collectionName);
+            // Step 2: Read the content
+            String part1 = readFromFile(fileName1);
+            String part2 = readFromFile(fileName2);
+            String mergedPart = part1 + "\n" + part2;
 
-            // Insert news articles into MongoDB collection
-            for (NewsArticle article : newsArticles) {
-                Document doc = new Document("title", article.getTitle())
-                        .append("text", article.getText());
-                collection.insertOne(doc);
+            // Step 3: Extract the text between <REUTERS> tags
+            Pattern reutersPattern = Pattern.compile("<REUTERS[^>]*>(.*?)<\\/REUTERS>", Pattern.DOTALL);
+            Matcher reutersMatcher = reutersPattern.matcher(mergedPart);
+
+            // Step 4: Extract text between <TITLE> and <TEXT> tags
+            Pattern titlePattern = Pattern.compile("<TITLE[^>]*>(.*?)<\\/TITLE>", Pattern.DOTALL);
+            Pattern textPattern = Pattern.compile("<TEXT[^>]*>(.*?)<\\/TEXT>", Pattern.DOTALL);
+
+            // Step 5: Insert each article as a document in the "A3DB" database
+            while (reutersMatcher.find()) {
+                String reutersArticle = reutersMatcher.group(1);
+
+                Matcher titleMatcher = titlePattern.matcher(reutersArticle);
+                Matcher textMatcher = textPattern.matcher(reutersArticle);
+
+                if (titleMatcher.find() && textMatcher.find()) {
+                    String title = titleMatcher.group(1);
+                    String text = textMatcher.group(1);
+
+                    // Create a document and insert into MongoDB
+                    Document document = new Document();
+                    document.put("title", title);
+                    document.put("text", text);
+                    collection.insertOne(document);
+                }
             }
-            System.out.println("News articles inserted into the MongoDB collection successfully.");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static String readNewsFile(String filePath) {
+    private static String readFromFile(String fileName) {
         StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 content.append(line).append("\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return content.toString();
-    }
-
-    private static List<NewsArticle> extractNewsArticles(String... fileContents) {
-        List<NewsArticle> newsArticles = new ArrayList<>();
-        String reutersPattern = "<REUTERS>(.*?)</REUTERS>";
-        String titlePattern = "<TITLE>(.*?)</TITLE>";
-        String textPattern = "<TEXT>(.*?)</TEXT>";
-        Pattern reutersRegex = Pattern.compile(reutersPattern, Pattern.DOTALL);
-        Pattern titleRegex = Pattern.compile(titlePattern, Pattern.DOTALL);
-        Pattern textRegex = Pattern.compile(textPattern, Pattern.DOTALL);
-
-        for (String content : fileContents) {
-            Matcher reutersMatcher = reutersRegex.matcher(content);
-            while (reutersMatcher.find()) {
-                String reutersTagContent = reutersMatcher.group(1);
-                Matcher titleMatcher = titleRegex.matcher(reutersTagContent);
-                Matcher textMatcher = textRegex.matcher(reutersTagContent);
-                if (titleMatcher.find() && textMatcher.find()) {
-                    String title = titleMatcher.group(1).trim();
-                    String text = textMatcher.group(1).trim();
-                    NewsArticle article = new NewsArticle(title, text);
-                    newsArticles.add(article);
-                }
-            }
-        }
-        return newsArticles;
     }
 }
