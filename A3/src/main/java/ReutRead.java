@@ -7,8 +7,15 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The ReutRead class processes data from .sgm files
+ * and inserts article titles and texts into a MongoDB collection.
+ */
 public class ReutRead {
 
+    /**
+     * Processes the content of two .sgm files and inserts article titles and texts into a MongoDB collection named "News".
+     */
     public void processData() {
         String fileName1 = "/Users/bhavishaoza/IdeaProjects/DataMgmt/A3/src/reut2-009.sgm";
         String fileName2 = "/Users/bhavishaoza/IdeaProjects/DataMgmt/A3/src/reut2-014.sgm";
@@ -55,6 +62,12 @@ public class ReutRead {
         }
     }
 
+    /**
+     * Reads content from a file and returns it as a single string.
+     *
+     * @param fileName The name of the file to read.
+     * @return The content of the file as a single string.
+     */
     private static String readFromFile(String fileName) {
         StringBuilder content = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
