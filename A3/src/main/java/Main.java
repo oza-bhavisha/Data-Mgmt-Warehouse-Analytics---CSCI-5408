@@ -5,18 +5,22 @@ public class Main {
         //ReutRead reutRead = new ReutRead();
         //reutRead.processData();
 
-        // Problem 1B call - WOrdCounter
+        // Problem 1B call - WordCounter
         String fileName = "/Users/bhavishaoza/IdeaProjects/DataMgmt/A3/src/reut2-009.sgm";
         WordCounter wordCounter = new WordCounter();
         wordCounter.countWordsFromFile(fileName);
         wordCounter.printWordFrequency();
 
         String[] leastCommonWords = wordCounter.getLeastCommonWords();
-        System.out.println("\nLeast common words:");
+        System.out.println("\n++++++++++++++++++++++");
+        System.out.println("Least common words:");
+        System.out.println("++++++++++++++++++++++");
         printArray(leastCommonWords);
 
         String[] mostCommonWords = wordCounter.getMostCommonWords();
-        System.out.println("\nMost common words:");
+        System.out.println("\n++++++++++++++++++++++");
+        System.out.println("Most common words:");
+        System.out.println("++++++++++++++++++++++");
         printArray(mostCommonWords);
     }
 

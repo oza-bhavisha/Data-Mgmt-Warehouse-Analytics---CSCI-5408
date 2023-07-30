@@ -40,7 +40,9 @@ public class WordCounter {
      * Prints the word frequencies to the console.
      */
     public void printWordFrequency() {
+        System.out.println("++++++++++++++++++++++");
         System.out.println("Word count:");
+        System.out.println("++++++++++++++++++++++");
         for (Map.Entry<String, Integer> entry : wordFrequency.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
