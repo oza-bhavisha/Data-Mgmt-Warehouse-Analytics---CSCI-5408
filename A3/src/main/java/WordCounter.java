@@ -84,7 +84,21 @@ public class WordCounter {
      * @param frequency The frequency of the words to retrieve.
      * @return An array of words with the given frequency.
      */
-    private String[] getWordsWithFrequency(int frequency) {
-        return wordFrequency.entrySet().stream().filter(entry -> entry.getValue() == frequency).map(Map.Entry::getKey).toArray(String[]::new);
+    public String[] getWordsWithFrequency(int frequency) {
+        List<String> wordsWithFrequency = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : wordFrequency.entrySet()) {
+            if (entry.getValue() == frequency) {
+                wordsWithFrequency.add(entry.getKey());
+            }
+        }
+        return wordsWithFrequency.toArray(new String[0]);
+    }
+    /**
+     * Gets the word frequency map.
+     *
+     * @return The word frequency map.
+     */
+    public Map<String, Integer> getWordFrequency() {
+        return wordFrequency;
     }
 }

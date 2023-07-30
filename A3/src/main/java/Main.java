@@ -15,13 +15,17 @@ public class Main {
         System.out.println("\n++++++++++++++++++++++");
         System.out.println("Least common words:");
         System.out.println("++++++++++++++++++++++");
-        printArray(leastCommonWords);
+        for (String word : leastCommonWords) {
+            System.out.println(word + ": " + wordCounter.getWordFrequency().get(word));
+        }
 
         String[] mostCommonWords = wordCounter.getMostCommonWords();
         System.out.println("\n++++++++++++++++++++++");
         System.out.println("Most common words:");
         System.out.println("++++++++++++++++++++++");
-        printArray(mostCommonWords);
+        for (String word : mostCommonWords) {
+            System.out.println(word + ": " + wordCounter.getWordFrequency().get(word));
+        }
     }
 
     private static void printArray(String[] array) {
