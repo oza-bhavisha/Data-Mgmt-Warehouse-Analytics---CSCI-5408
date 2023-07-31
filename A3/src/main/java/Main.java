@@ -1,3 +1,6 @@
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.Map;
 
 public class Main {
@@ -41,16 +44,29 @@ public class Main {
         String[] sgmFiles = {"src/reut2-009.sgm", "src/reut2-014.sgm"};
 
         for (String filePath : sgmFiles) {
-            Map<String, Map<String, Integer>> bagOfWordsMap = newsTitleExtractor.extractNewsTitles(filePath);
-            System.out.println("Bag-of-words for news titles from " + filePath + ":");
-            for (Map.Entry<String, Map<String, Integer>> entry : bagOfWordsMap.entrySet()) {
-                System.out.println("News Title: " + entry.getKey());
-                Map<String, Integer> wordCountMap = entry.getValue();
-                for (Map.Entry<String, Integer> wordEntry : wordCountMap.entrySet()) {
-                    System.out.println(wordEntry.getKey() + " = " + wordEntry.getValue());
-                }
-                System.out.println();
-            }
+            Map<String, String> newsPolarityMap = newsTitleExtractor.extractNewsTitlesWithPolarity(filePath);
+            displayResults(filePath, newsPolarityMap);
         }
+    }
+
+    private static void displayResults(String filePath, Map<String, String> newsPolarityMap) {
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new JFrame("News Title Polarity - " + filePath);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+            DefaultTableModel tableModel = new DefaultTableModel(
+                    new Object[]{"News Title", "Polarity"}, 0);
+
+            for (Map.Entry<String, String> entry : newsPolarityMap.entrySet()) {
+                tableModel.addRow(new Object[]{entry.getKey(), entry.getValue()});
+            }
+
+            JTable table = new JTable(tableModel);
+            JScrollPane scrollPane = new JScrollPane(table);
+            frame.add(scrollPane);
+
+            frame.pack();
+            frame.setVisible(true);
+        });
     }
 }

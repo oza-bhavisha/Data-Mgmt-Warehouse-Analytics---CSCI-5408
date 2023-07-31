@@ -1231,6 +1231,7 @@ navigable
 neat
 neatest
 neatly
+network
 nice
 nicely
 nicer
@@ -1703,6 +1704,13 @@ spontaneous
 sporty
 spotless
 sprightly
+RIDE
+SHARING
+SYSTEMS
+QTR
+NET
+RISING
+SHARPLY
 stability
 stabilize
 stable
