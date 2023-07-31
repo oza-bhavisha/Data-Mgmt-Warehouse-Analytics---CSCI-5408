@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact name="A3:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/A3_jar</output-path>
+    <root id="root">
+      <element id="archive" name="A3.jar">
+        <element id="module-output" name="A3" />
+      </element>
+      <element id="library" level="project" name="Maven: org.mongodb:bson-record-codec:4.9.0" />
+      <element id="library" level="project" name="Maven: org.mongodb:mongodb-driver-core:4.9.0" />
+      <element id="library" level="project" name="Maven: org.springframework:spring-beans:6.0.9" />
+      <element id="library" level="project" name="Maven: org.springframework:spring-context:6.0.9" />
+      <element id="library" level="project" name="Maven: org.mongodb:bson:4.9.0" />
+      <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-autoconfigure:3.1.0" />
+      <element id="library" level="project" name="Maven: org.springframework:spring-aop:6.0.9" />
+      <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot:3.1.0" />
+      <element id="library" level="project" name="Maven: org.springframework:spring-expression:6.0.9" />
+      <element id="library" level="project" name="Maven: org.springframework:spring-jcl:6.0.9" />
+      <element id="library" level="project" name="Maven: org.springframework:spring-core:6.0.9" />
+      <element id="library" level="project" name="Maven: org.mongodb:mongo-java-driver:3.12.14" />
+      <element id="library" level="project" name="Maven: org.mongodb:mongodb-driver-sync:4.9.0" />
+    </root>
+  </artifact>
+</component>
