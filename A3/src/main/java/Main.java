@@ -11,7 +11,7 @@ public class Main {
         //reutRead.processData();
 
         // Problem 1B call - WordCounter
-//        String fileName = "/Users/bhavishaoza/IdeaProjects/DataMgmt/A3/src/reut2-009.sgm";
+//        String fileName = "src/reut2-009.sgm";
 //        WordCounter wordCounter = new WordCounter();
 //        wordCounter.countWordsFromFile(fileName);
 //        wordCounter.printWordFrequency();
@@ -49,6 +49,12 @@ public class Main {
         }
     }
 
+    /**
+     * Display the results of news title analysis in a GUI table.
+     *
+     * @param filePath         The path of the file containing news titles.
+     * @param newsPolarityMap  A map containing news titles as keys and their polarities as values.
+     */
     private static void displayResults(String filePath, Map<String, String> newsPolarityMap) {
         EventQueue.invokeLater(() -> {
             JFrame frame = new JFrame("News Title Polarity - " + filePath);
